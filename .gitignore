@@ -1,0 +1,10 @@
+logs/
+conf/shadowsocks.json
+
+.DS_Store
+ngrok
+shadowsocks
+shadowsocks-local-mac64-1.1.4
+sl
+minikube
+

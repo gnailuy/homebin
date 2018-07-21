@@ -1,0 +1,8 @@
+#!/usr/bin/expect
+set timeout 60
+
+spawn /usr/bin/ssh [lindex $argv 0] "exit"
+expect {
+    "*yes/no*" { send "yes\r"; exp_continue }
+    "*password:" { send "PASSWORD\r" }
+}

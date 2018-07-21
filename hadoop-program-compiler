@@ -1,0 +1,67 @@
+#!/bin/bash
+
+compileOnly=false
+runOnly=false
+
+usage() {
+    echo -e "Usage:"
+    echo -e "\t`basename $0` [-h] [-c|--compile] [-r|--run] [-f=|--filename=SourceFile]"
+}
+
+for i in "$@"; do
+    case $i in
+        -h|--help)
+            usage
+            exit 0
+        ;;
+        -c|--compile)
+            compileOnly=true
+        ;;
+        -r|--run)
+            runOnly=true
+        ;;
+        -f=*|--filename=*)
+            fullname=`echo $i | sed 's/[-a-zA-Z0-9]*=//'`
+        ;;
+        *)
+            usage
+            exit 1
+        ;;
+    esac
+done
+
+if [ -z $fullname ]; then
+    usage
+    exit 1
+elif [ ! -f $fullname ]; then
+    echo -e "Cannot open source file: $fullname"
+    usage
+    exit 1
+fi
+
+# extension="${fullname##*.}"
+filename="${fullname%.*}"
+
+compile() {
+    javac -classpath .:`hadoop classpath` $fullname
+}
+
+run() {
+    java -cp .:`hadoop classpath` $filename
+}
+
+if $compileOnly; then # Will override runOnly if compileOnly is true
+    compile
+elif $runOnly; then
+    if [ ! -f $filename.class ]; then
+        echo "Shall we compile the source first?"
+        exit 1
+    else
+        run
+    fi
+else
+    compile
+    if [ $? == 0 ]; then
+        run
+    fi
+fi

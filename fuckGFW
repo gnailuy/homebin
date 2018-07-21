@@ -1,0 +1,8 @@
+#!/usr/bin/expect
+set timeout 60
+spawn /usr/bin/ssh -D 6174 -g yuliang@direct.gnailuy.com
+expect {
+    "*yes/no*" { send "yes\r"; exp_continue }
+    "*password:" { send "nopassword\r" }
+}
+interact { timeout 60 { send " "} }
