@@ -18,9 +18,9 @@ elif [ "X$OUT" == "X" ]; then
 fi
 
 if [ "$MOD" == "e" ]; then
-    openssl aes-128-cbc -salt -in $IN -out $OUT
+    openssl aes-128-cbc -salt -md md5 -in $IN -out $OUT
 elif [ "$MOD" == "d" ]; then
-    openssl aes-128-cbc -d -salt -in $IN -out $OUT
+    openssl aes-128-cbc -d -salt -md md5 -in $IN -out $OUT
 else
     usage
     exit 1
